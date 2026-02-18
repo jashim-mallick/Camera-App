@@ -1,10 +1,10 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { RotateCcw, X } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import Webcam from "react-webcam";
+
+import { RotateCcw, X } from "lucide-react";
 import { Button } from "./shadcnui/button";
 
 interface MobileCameraProps {
@@ -84,10 +84,7 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 						<div className="absolute right-0 bottom-10 left-0 flex justify-center">
 							<button
 								onClick={capture}
-								className={cn(
-									"h-20 w-20 rounded-full border-4 border-white",
-									"bg-white/20 backdrop-blur-md transition active:scale-95",
-								)}
+								className="h-20 w-20 rounded-full border-4 border-white bg-white/20 backdrop-blur-md transition active:scale-95"
 							/>
 						</div>
 					) : (
