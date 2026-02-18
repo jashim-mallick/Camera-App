@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
 	cacheComponents: true,
 	reactCompiler: true,
 	typedRoutes: true,
+	allowedDevOrigins: ["local-origin.dev", "*.local-origin.dev"],
 };
 
 export default nextConfig;

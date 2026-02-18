@@ -1,3 +1,4 @@
+import MobileCamera from "@/components/MobileCamera";
 import { Card, CardContent, CardHeader } from "@/components/shadcnui/card";
 import { Metadata } from "next";
 
@@ -8,11 +9,13 @@ export const metadata: Metadata = {
 
 const page = () => {
 	return (
-		<section className="grid place-items-center h-[80dvh]">
-			<Card className=" min-w-sm">
-			<CardHeader className="text-center">LogIn Form</CardHeader>
-			<CardContent></CardContent>
-		</Card>
+		<section className="grid h-[80dvh] place-items-center">
+			<Card className="min-w-sm">
+				<CardHeader className="text-center">capture</CardHeader>
+				<CardContent>
+					<MobileCamera />
+				</CardContent>
+			</Card>
 		</section>
 	);
 };
