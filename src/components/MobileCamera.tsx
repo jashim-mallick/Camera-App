@@ -1,9 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
 import { useRef, useState } from "react";
 import Webcam from "react-webcam";
+import { Button } from "./shadcnui/button";
+import { Card, CardContent } from "./shadcnui/card";
 
 const MobileCamera = () => {
 	const webcamRef = useRef<Webcam>(null);
@@ -60,7 +61,7 @@ const MobileCamera = () => {
 				{image && (
 					<div className="space-y-2">
 						<p className="text-muted-foreground text-sm">Captured Image</p>
-						<img
+						<Image
 							src={image}
 							alt="Captured"
 							className="rounded-xl border"
