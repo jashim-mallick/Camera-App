@@ -1,75 +1,109 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { RotateCcw, X } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import Webcam from "react-webcam";
-import { Button } from "./shadcnui/button";
-import { Card, CardContent } from "./shadcnui/card";
 
-const MobileCamera = () => {
+interface MobileCameraProps {
+	onCapture?: (img: string) => void;
+}
+
+const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 	const webcamRef = useRef<Webcam>(null);
 	const [open, setOpen] = useState(false);
-	const [image, setImage] = useState<string | null>(null);
+	const [facingMode, setFacingMode] = useState<"user" | "environment">(
+		"environment",
+	);
+	const [captured, setCaptured] = useState<string | null>(null);
 
 	const capture = () => {
 		const imageSrc = webcamRef.current?.getScreenshot();
 		if (imageSrc) {
-			setImage(imageSrc);
+			setCaptured(imageSrc);
+			onCapture?.(imageSrc);
 		}
 	};
 
-	return (
-		<Card className="mx-auto w-full max-w-md space-y-4 p-4">
-			<CardContent className="space-y-4">
-				{!open && (
-					<Button
-						className="w-full"
-						onClick={() => setOpen(true)}>
-						Open Camera
-					</Button>
-				)}
+	const switchCamera = () => {
+		setFacingMode((prev) => (prev === "user" ? "environment" : "user"));
+	};
 
-				{open && (
-					<div className="space-y-4">
-						<div className="overflow-hidden rounded-xl border">
-							<Webcam
-								ref={webcamRef}
-								audio={false}
-								screenshotFormat="image/jpeg"
-								videoConstraints={{ facingMode: "environment" }}
-								className="w-full"
+	const closeCamera = () => {
+		setCaptured(null);
+		setOpen(false);
+	};
+
+	return (
+		<>
+			{!open && <Button onClick={() => setOpen(true)}>Open Camera</Button>}
+
+			{open && (
+				<div className="fixed inset-0 z-50 bg-black">
+					{/* Top Controls */}
+					<div className="absolute top-4 right-4 left-4 z-10 flex items-center justify-between text-white">
+						<Button
+							size="icon"
+							variant="ghost"
+							className="text-white"
+							onClick={closeCamera}>
+							<X className="h-6 w-6" />
+						</Button>
+
+						<Button
+							size="icon"
+							variant="ghost"
+							className="text-white"
+							onClick={switchCamera}>
+							<RotateCcw className="h-5 w-5" />
+						</Button>
+					</div>
+
+					{/* Preview */}
+					{!captured ? (
+						<Webcam
+							ref={webcamRef}
+							audio={false}
+							screenshotFormat="image/jpeg"
+							videoConstraints={{ facingMode }}
+							className="h-full w-full object-cover"
+						/>
+					) : (
+						<Image
+							src={captured}
+							alt="Captured"
+							fill
+							className="object-cover"
+						/>
+					)}
+
+					{/* Bottom Controls */}
+					{!captured ? (
+						<div className="absolute right-0 bottom-10 left-0 flex justify-center">
+							<button
+								onClick={capture}
+								className={cn(
+									"h-20 w-20 rounded-full border-4 border-white",
+									"bg-white/20 backdrop-blur-md transition active:scale-95",
+								)}
 							/>
 						</div>
-
-						<div className="flex gap-2">
+					) : (
+						<div className="absolute right-0 bottom-10 left-0 flex justify-center gap-4">
 							<Button
-								className="flex-1"
-								onClick={capture}>
-								Capture
+								variant="secondary"
+								onClick={() => setCaptured(null)}>
+								Retake
 							</Button>
 
-							<Button
-								variant="destructive"
-								className="flex-1"
-								onClick={() => setOpen(false)}>
-								Close
-							</Button>
+							<Button onClick={closeCamera}>Done</Button>
 						</div>
-					</div>
-				)}
-
-				{image && (
-					<div className="space-y-2">
-						<p className="text-muted-foreground text-sm">Captured Image</p>
-						<Image
-							src={image}
-							alt="Captured"
-							className="rounded-xl border"
-						/>
-					</div>
-				)}
-			</CardContent>
-		</Card>
+					)}
+				</div>
+			)}
+		</>
 	);
 };
 
