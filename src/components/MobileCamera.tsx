@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { RotateCcw, X } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import Webcam from "react-webcam";
+import { Button } from "./shadcnui/button";
 
 interface MobileCameraProps {
 	onCapture?: (img: string) => void;
