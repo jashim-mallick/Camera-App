@@ -86,7 +86,6 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 							ref={webcamRef}
 							audio={false}
 							screenshotFormat="image/jpeg"
-							screenshotQuality={1}
 							videoConstraints={{
 								facingMode,
 								width: { ideal: 3840 },
