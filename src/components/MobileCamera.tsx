@@ -20,11 +20,30 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 	const [captured, setCaptured] = useState<string | null>(null);
 
 	const capture = () => {
-		const imageSrc = webcamRef.current?.getScreenshot();
-		if (imageSrc) {
-			setCaptured(imageSrc);
-			onCapture?.(imageSrc);
+		const video = webcamRef.current?.video;
+		if (!video) return;
+
+		const canvas = document.createElement("canvas");
+		const width = video.videoWidth;
+		const height = video.videoHeight;
+
+		canvas.width = width;
+		canvas.height = height;
+
+		const ctx = canvas.getContext("2d");
+		if (!ctx) return;
+
+		if (facingMode === "user") {
+			ctx.translate(width, 0);
+			ctx.scale(-1, 1);
 		}
+
+		ctx.drawImage(video, 0, 0, width, height);
+
+		const imageSrc = canvas.toDataURL("image/jpeg", 1);
+
+		setCaptured(imageSrc);
+		onCapture?.(imageSrc);
 	};
 
 	const switchCamera = () => {
@@ -67,8 +86,15 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 							ref={webcamRef}
 							audio={false}
 							screenshotFormat="image/jpeg"
-							videoConstraints={{ facingMode }}
-							className="h-full w-full object-cover"
+							screenshotQuality={1}
+							videoConstraints={{
+								facingMode,
+								width: { ideal: 3840 },
+								height: { ideal: 2160 },
+							}}
+							className={`h-full w-full object-cover ${
+								facingMode === "user" ? "scale-x-[-1]" : ""
+							}`}
 						/>
 					) : (
 						<Image
