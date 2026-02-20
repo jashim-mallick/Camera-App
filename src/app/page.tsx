@@ -12,7 +12,7 @@ const page = () => {
 		<section className="grid h-[80dvh] place-items-center">
 			<Card className="min-w-sm">
 				<CardHeader className="text-center">capture</CardHeader>
-				<CardContent>
+				<CardContent className="grid place-items-center">
 					<MobileCamera />
 				</CardContent>
 			</Card>
