@@ -1,14 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 
 import { Camera, RotateCcw, X } from "lucide-react";
 import { Button } from "./shadcnui/button";
 
 interface MobileCameraProps {
-	onCapture?: (img: string) => void;
+	onCapture?: (blob: Blob) => void;
 }
 
 const MobileCamera = ({ onCapture }: MobileCameraProps) => {
@@ -19,10 +19,8 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 	);
 	const [captured, setCaptured] = useState<string | null>(null);
 
-	const revokeImage = () => {
-		if (captured) {
-			URL.revokeObjectURL(captured);
-		}
+	const revokeImage = (url?: string | null) => {
+		if (url) URL.revokeObjectURL(url);
 	};
 
 	const capture = () => {
@@ -54,7 +52,7 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 
 				const url = URL.createObjectURL(blob);
 				setCaptured(url);
-				onCapture?.(url);
+				onCapture?.(blob);
 			},
 			"image/jpeg",
 			0.95,
@@ -67,7 +65,7 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 
 	const closeCamera = () => {
 		stopStream();
-		revokeImage();
+		revokeImage(captured);
 		setCaptured(null);
 		setOpen(false);
 	};
@@ -76,6 +74,13 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 		const stream = webcamRef.current?.video?.srcObject as MediaStream | null;
 		stream?.getTracks().forEach((track) => track.stop());
 	};
+
+	useEffect(() => {
+		return () => {
+			stopStream();
+			revokeImage();
+		};
+	}, []);
 
 	return (
 		<>
@@ -131,6 +136,7 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 					{!captured ? (
 						<div className="absolute right-0 bottom-10 left-0 flex justify-center">
 							<Button
+								variant="ghost"
 								onClick={capture}
 								type="button"
 								aria-label="Capture photo"
