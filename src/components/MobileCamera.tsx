@@ -10,6 +10,8 @@ interface MobileCameraProps {
 	onCapture?: (blob: Blob) => void;
 }
 
+const FLASH_DURATION_MS = 120;
+
 const filterMap: Record<string, string> = {
 	none: "none",
 	grayscale: "grayscale(100%)",
@@ -30,11 +32,18 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 	const [captured, setCaptured] = useState<string | null>(null);
 	const [filter, setFilter] = useState("none");
 	const [flash, setFlash] = useState(false);
-	const [showPreview, setShowPreview] = useState(false);
 
 	const stopStream = () => {
 		const stream = webcamRef.current?.video?.srcObject as MediaStream | null;
 		stream?.getTracks().forEach((track) => track.stop());
+	};
+
+	const discardCapturedImage = () => {
+		if (imageRef.current) {
+			URL.revokeObjectURL(imageRef.current);
+			imageRef.current = null;
+		}
+		setCaptured(null);
 	};
 
 	const capture = () => {
@@ -42,7 +51,7 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 		if (!video) return;
 
 		setFlash(true);
-		setTimeout(() => setFlash(false), 120);
+		setTimeout(() => setFlash(false), FLASH_DURATION_MS);
 
 		const canvas = document.createElement("canvas");
 		const width = video.videoWidth;
@@ -67,9 +76,7 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 			(blob) => {
 				if (!blob) return;
 
-				if (imageRef.current) {
-					URL.revokeObjectURL(imageRef.current);
-				}
+				discardCapturedImage();
 
 				const url = URL.createObjectURL(blob);
 				imageRef.current = url;
@@ -83,20 +90,14 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 
 	const closeCamera = () => {
 		stopStream();
-		if (imageRef.current) {
-			URL.revokeObjectURL(imageRef.current);
-			imageRef.current = null;
-		}
-		setCaptured(null);
+		discardCapturedImage();
 		setOpen(false);
 	};
 
 	useEffect(() => {
 		return () => {
 			stopStream();
-			if (imageRef.current) {
-				URL.revokeObjectURL(imageRef.current);
-			}
+			discardCapturedImage();
 		};
 	}, []);
 
@@ -152,7 +153,7 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 						) : (
 							<Image
 								src={captured}
-								alt="Captured"
+								alt="Captured image"
 								fill
 								className="object-contain"
 							/>
@@ -161,7 +162,7 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 
 					<div className="bg-gradient from-black/80 to-transparent pt-4 pb-6">
 						{!captured && (
-							<div className="mx-2 my-3 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+							<div className="mx-2 my-3 overflow-x-auto whitespace-nowrap [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
 								<div className="flex min-w-max gap-3">
 									{Object.keys(filterMap).map((key) => (
 										<button
@@ -180,37 +181,19 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 						)}
 
 						<div className="relative flex items-center justify-center">
-							{captured && (
-								<div
-									onClick={() => setShowPreview(true)}
-									className="absolute left-6 h-14 w-14 overflow-hidden rounded-md border border-white">
-									<Image
-										src={captured}
-										alt="thumb"
-										fill
-										className="object-cover"
-									/>
-								</div>
-							)}
-
 							{!captured ? (
 								<Button
 									variant="ghost"
 									onClick={capture}
 									type="button"
+									aria-label="Capture photo"
 									className="h-20 w-20 rounded-full border-4 border-white bg-white/20 transition active:scale-95"
 								/>
 							) : (
 								<div className="flex gap-4">
 									<Button
 										variant="secondary"
-										onClick={() => {
-											if (imageRef.current) {
-												URL.revokeObjectURL(imageRef.current);
-												imageRef.current = null;
-											}
-											setCaptured(null);
-										}}>
+										onClick={discardCapturedImage}>
 										Retake
 									</Button>
 
