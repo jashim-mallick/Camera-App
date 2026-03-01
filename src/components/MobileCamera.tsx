@@ -16,9 +16,9 @@ const filterMap: Record<string, string> = {
 	none: "none",
 	grayscale: "grayscale(100%)",
 	sepia: "sepia(100%)",
-	contrast: "contrast(140%)",
+	contrast: "contrast(120%)",
 	warm: "sepia(40%) saturate(120%)",
-	cool: "hue-rotate(180deg) saturate(120%)",
+	cool: "brightness(102%) contrast(108%) saturate(130%)",
 };
 
 const MobileCamera = ({ onCapture }: MobileCameraProps) => {
