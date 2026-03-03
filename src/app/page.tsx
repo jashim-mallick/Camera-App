@@ -1,4 +1,4 @@
-import MobileCamera from "@/components/MobileCamera";
+import MobileCamera from "@/components/Camera/MobileCamera";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
