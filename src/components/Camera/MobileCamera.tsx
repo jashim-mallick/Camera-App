@@ -23,7 +23,8 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 		flash,
 		capture,
 		closeCamera,
-		discardCapturedImage,
+		removeImage,
+		discardAllImages,
 	} = useCamera({ onCapture });
 
 	return (
@@ -105,14 +106,18 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 						images={images}
 						selectedId={selectedId}
 						onSelect={setSelectedId}
-						onDelete={discardCapturedImage}
+						onDelete={removeImage}
 					/>
 
 					{/* Controls */}
 					<CameraControls
 						imageCount={images.length}
 						onCapture={capture}
-						onDeleteLast={discardCapturedImage}
+						onDeleteSelected={() => {
+							if (selectedId) {
+								removeImage(selectedId);
+							}
+						}}
 						onDone={() => {
 							closeCamera();
 							setOpen(false);

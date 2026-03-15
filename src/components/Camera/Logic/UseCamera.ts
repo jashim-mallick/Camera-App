@@ -1,17 +1,12 @@
+import { nanoid } from "nanoid";
 import { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { filterMap, FilterType, FlashDuration } from "../Config/Filter";
+import { CapturedImage } from "../Types";
 
 export interface MobileCameraProps {
 	onCapture?: (blob: Blob) => void;
 }
-
-type CapturedImage = {
-	id: string;
-	url: string;
-	blob: Blob;
-	createdAt: number;
-};
 
 export const useCamera = ({ onCapture }: MobileCameraProps) => {
 	const webcamRef = useRef<Webcam>(null);
@@ -30,12 +25,11 @@ export const useCamera = ({ onCapture }: MobileCameraProps) => {
 		const stream = webcamRef.current?.video?.srcObject as MediaStream | null;
 		stream?.getTracks().forEach((track) => track.stop());
 	};
-	const discardCapturedImage = () => {
-		if (imageRef.current) {
-			URL.revokeObjectURL(imageRef.current);
-			imageRef.current = null;
-		}
-		setImages([]);
+	const discardAllImages = () => {
+		setImages((prevImages) => {
+			prevImages.forEach((img) => URL.revokeObjectURL(img.url));
+			return [];
+		});
 	};
 
 	const capture = () => {
@@ -70,18 +64,18 @@ export const useCamera = ({ onCapture }: MobileCameraProps) => {
 			(blob) => {
 				if (!blob) return;
 
-				discardCapturedImage();
-
 				const url = URL.createObjectURL(blob);
-				imageRef.current = url;
-				const newImage: CapturedImage = {
-					id: crypto.randomUUID(),
-					url,
-					blob,
-					createdAt: Date.now(),
-				};
 
-				setImages((prev) => [...prev, newImage]);
+				setImages((prev) => [
+					...prev,
+					{
+						id: nanoid(),
+						url,
+						blob,
+						createdAt: Date.now(),
+					},
+				]);
+
 				onCapture?.(blob);
 			},
 			"image/jpeg",
@@ -91,10 +85,9 @@ export const useCamera = ({ onCapture }: MobileCameraProps) => {
 
 	const closeCamera = () => {
 		stopStream();
-		discardCapturedImage();
+		discardAllImages();
 		setOpen(false);
 	};
-
 	const removeImage = (id: string) => {
 		setImages((prev) => {
 			const target = prev.find((img) => img.id === id);
@@ -118,7 +111,7 @@ export const useCamera = ({ onCapture }: MobileCameraProps) => {
 				clearTimeout(flashTimeout.current);
 			}
 			stopStream();
-			discardCapturedImage();
+			discardAllImages();
 		};
 	}, []);
 
@@ -134,7 +127,7 @@ export const useCamera = ({ onCapture }: MobileCameraProps) => {
 		flash,
 		capture,
 		closeCamera,
-		discardCapturedImage,
+		discardAllImages,
 		removeImage,
 		removeLastImage,
 	};
