@@ -3,7 +3,7 @@
 import { Button } from "@/components/shadcnui/button";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CapturedImage } from "../Types";
 import ImageViewer from "./ImageViewer";
 
@@ -14,6 +14,12 @@ interface ThumbnailBarProps {
 
 const Thumblin = ({ images, onDelete }: ThumbnailBarProps) => {
 	const [viewerOpen, setViewerOpen] = useState(false);
+
+	useEffect(() => {
+		if (images.length === 0) {
+			setViewerOpen(false);
+		}
+	}, [images]);
 
 	if (!images.length) return null;
 
@@ -52,6 +58,7 @@ const Thumblin = ({ images, onDelete }: ThumbnailBarProps) => {
 					images={images}
 					startIndex={images.length - 1}
 					onClose={() => setViewerOpen(false)}
+					onDelete={onDelete}
 				/>
 			)}
 		</>

@@ -6,7 +6,7 @@ import { Button } from "../../shadcnui/button";
 interface CameraControlsProps {
 	imageCount: number;
 	onCapture: () => void;
-	onDeleteSelected?: () => void;
+	onDeleteLast?: () => void;
 	onDone: () => void;
 }
 
@@ -14,7 +14,7 @@ const CameraControls = ({
 	imageCount,
 	onCapture,
 	onDone,
-	onDeleteSelected,
+	onDeleteLast,
 }: CameraControlsProps) => {
 	return (
 		<div className="relative flex items-center justify-center pb-6">
@@ -28,7 +28,7 @@ const CameraControls = ({
 					<Button
 						size="icon"
 						variant="ghost"
-						onClick={onDeleteSelected}
+						onClick={onDeleteLast}
 						aria-label="Delete last photo">
 						<Trash2 size={22} />
 					</Button>

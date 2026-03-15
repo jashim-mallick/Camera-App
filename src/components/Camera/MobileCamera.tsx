@@ -11,7 +11,6 @@ import Thumblin from "./Ui/Thumblin";
 
 const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 	const [open, setOpen] = useState(false);
-	const [selectedId, setSelectedId] = useState<string | undefined>();
 
 	const {
 		webcamRef,
@@ -24,7 +23,6 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 		capture,
 		closeCamera,
 		removeImage,
-		discardAllImages,
 	} = useCamera({ onCapture });
 
 	return (
@@ -87,7 +85,8 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 						<div className="mx-2 my-3 overflow-x-auto whitespace-nowrap [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
 							<div className="flex min-w-max gap-3">
 								{(Object.keys(filterMap) as FilterType[]).map((key) => (
-									<button
+									<Button
+										variant="ghost"
 										key={key}
 										onClick={() => setFilter(key)}
 										className={`shrink-0 rounded-full border px-4 py-1 text-sm ${
@@ -96,7 +95,7 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 												: "border-white text-white"
 										}`}>
 										{key}
-									</button>
+									</Button>
 								))}
 							</div>
 						</div>
@@ -104,8 +103,6 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 
 					<Thumblin
 						images={images}
-						selectedId={selectedId}
-						onSelect={setSelectedId}
 						onDelete={removeImage}
 					/>
 
@@ -113,11 +110,6 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 					<CameraControls
 						imageCount={images.length}
 						onCapture={capture}
-						onDeleteSelected={() => {
-							if (selectedId) {
-								removeImage(selectedId);
-							}
-						}}
 						onDone={() => {
 							closeCamera();
 							setOpen(false);
