@@ -1,103 +1,175 @@
-# Next.js Starter Frontend
+﻿# Camero 📸
 
-A production-ready Next.js starter template for frontend use cases with modern tooling and best practices out of the box. Built with TypeScript, Tailwind CSS, and Next.js App Router.
+A demo **Camera Application** built for web and mobile browsers.  
+It allows users to capture photos, apply filters, preview images, and manage them in a smooth UI.
+
+----------
+
+## 🚀 Tech Stack
+
+-   **Next.js**
+    
+-   **React**
+    
+-   **Tailwind CSS**
+    
+-   **shadcn/ui**
+    
+-   **react-webcam**
+    
+-   **Lucide React**
+    
+-   **Blob API**
+    
+
+----------
 
 ## ✨ Features
 
-- ⚡ **Next.js 16** with App Router (latest stable)
-  - 🚀 Turbopack (stable) - 5-10x faster Fast Refresh
-  - 🔄 React Compiler Support (stable)
-  - 🛠️ Enhanced Routing & Caching APIs
-  - 🔍 Type-safe Routes with `typedRoutes` for better development experience
-- 🎨 **Tailwind CSS** v4 with `tailwind-merge` for class composition
-- 🌓 **Dark/Light Mode** with `next-themes`
-- ✨ **Lucide Icons** for beautiful, consistent icons
-- 🛠 **TypeScript** for type safety
-- 🎯 **React 19.2** with:
-  - 🆕 `<Activity />` component
-  - ⚡ `cacheSignal` for optimized re-renders
-  - 🚀 Performance Tracks for better optimization
-- 🧩 **UI Components** with `class-variance-authority` for type-safe variants
-- 🖼️ **Image Optimization** with `sharp`
-- 🔍 **ESLint** and **Prettier** for code quality
+-   📷 Capture photos using device camera
+    
+-   🎨 Image filters:
+    
+    -   Grayscale
+        
+    -   Sepia
+        
+    -   Contrast
+        
+    -   Warm
+        
+    -   Cool
+        
+-   🌗 Dark & Light mode support
+    
+-   🖼️ Thumbnail preview of captured images
+    
+-   🔄 Switch between front & back camera
+    
+-   💡 Flash effect on capture
+    
+-   🗑️ Delete images (from preview / viewer)
+    
+-   📱 Fully responsive (mobile-first design)
+    
 
-## 🚀 Getting Started
+----------
 
-### Prerequisites
+## 📸 How It Works
 
-- Node.js 22.x (LTS recommended)
-- npm 11.x or later (included with Node.js)
-- Git for version control
+1.  Open the camera
+    
+2.  Capture multiple photos
+    
+3.  Apply filters in real-time
+    
+4.  View images in a carousel viewer
+    
+5.  Delete or manage images
+    
 
-> **Note:** This project uses Next.js 16 with React 19.2, featuring Turbopack and React Compiler for optimal performance.
+----------
 
-### Installation
+## 🧠 Key Concepts Used
 
-1. Clone the repository:
+-   MediaStream API (`getUserMedia`)
+    
+-   Canvas API for image processing
+    
+-   Blob & Object URL handling
+    
+-   React custom hooks (`useCamera`)
+    
+-   Component-based architecture
+    
 
-   ```bash
-   git clone https://github.com/MrSaikatS/nextjs-starter-frontend.git
-   cd nextjs-starter-frontend
-   ```
+----------
 
-2. Install dependencies (using Bun is recommended for faster installation):
+## 📦 Installation
 
-   ```bash
-   # Using Bun (recommended)
-   bun install
+```bash
+git clone https://github.com/your-username/camera-app.git
+cd camera-app
+bun install   # or npm install
+bun dev       # or npm run dev
 
-   # Or using npm
-   npm install
+```
 
-   # Or using pnpm
-   pnpm install
-   ```
+----------
 
-3. Start the development server:
+## 📁 Project Structure
 
-   ```bash
-   # Using Bun (recommended for faster development)
-   bun dev
+```
+camera-app/
+├── public/
 
-   # Or using npm
-   npm run dev
+├── src/
+│   ├── app/
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   └── page.tsx
+│   │
+│   ├── components/
+│   │   ├── Buttons/
+│   │   │
+│   │   ├── Camera/
+│   │   │   ├── Config/
+│   │   │   │   └── Filter.ts
+│   │   │   │
+│   │   │   ├── Logic/
+│   │   │   │   └── UseCamera.ts
+│   │   │   │
+│   │   │   ├── Ui/
+│   │   │   │   ├── CameraControl.tsx
+│   │   │   │   ├── ImageViewer.tsx
+│   │   │   │   └── Thumblin.tsx
+│   │   │   │
+│   │   │   ├── MobileCamera.tsx
+│   │   │   └── Types.ts
+│   │   │
+│   │   ├── Header/
+│   │   │   └── Header.tsx
+│   │   │
+│   │   ├── Providers/
+│   │   │
+│   │   └── shadcnui/
+│   │       ├── button.tsx
+│   │       ├── card.tsx
+│   │       ├── carousel.tsx
+│   │       ├── form.tsx
+│   │       ├── label.tsx
+│   │       └── ThemeToggleButton.tsx
+│   │
+│   ├── hooks/
+│   └── lib/
 
-   # Or using pnpm
-   pnpm dev
-   ```
+├── .gitignore
+├── .prettierrc
+├── bun.lock
+├── components.json
+├── eslint.config.mjs
+├── LICENSE
+├── next-env.d.ts
+├── next.config.ts
+├── package.json
+├── postcss.config.mjs
+├── README.md
+└── tsconfig.json
 
-4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+```
 
-## 🛠 Development
+----------
 
-### Available Scripts
+## ⚠️ Notes
 
-#### Using Bun (recommended)
+-   Camera access requires **HTTPS** on mobile devices
+    
+-   Image quality depends on device hardware and browser support
+    
+-   Blob URLs are properly managed to prevent memory leaks
+    
 
-- `bun dev` - Start the development server with Turbopack (5-10x faster)
-- `bun build` - Build for production
-- `bun start` - Start production server
-- `bun lint` - Run ESLint
-- `bun test` - Run tests
-- `bun prod` - Lint, build, and start production server
-
-#### Using npm/pnpm
-
-- `npm run dev` or `pnpm dev` - Start the development server
-- `npm run build` or `pnpm build` - Build for production
-- `npm start` or `pnpm start` - Start production server
-- `npm run lint` or `pnpm lint` - Run ESLint
-- `npm test` or `pnpm test` - Run tests
-- `npm run prod` or `pnpm prod` - Lint, build, and start production server
-
-## 🎨 Theming
-
-This project uses `next-themes` for theme management. The default theme is set to `dark` but can be toggled using the theme toggle button in the header. The theming system supports both light and dark modes with smooth transitions between them.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
+----------
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -108,6 +180,22 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Tailwind CSS Documentation](https://tailwindcss.com/docs)
 - [shadcn/ui](https://ui.shadcn.com/)
 
----
 
-Built with ❤️ by [Saikat Sardar](https://github.com/MrSaikatS)
+## 📌 Future Improvements
+
+-   📥 Download / Save image
+    
+-   ☁️ Upload to cloud storage
+    
+-   🎥 Video recording support
+    
+-   📐 Advanced filters (AI / ML based)
+    
+
+----------
+
+## 👨‍💻 Author
+
+Built with ❤️ by [Md Jashim Mallick](https://https://github.com/jashim-mallick)
+
+----------
