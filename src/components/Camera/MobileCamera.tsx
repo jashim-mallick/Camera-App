@@ -12,6 +12,11 @@ import Thumblin from "./Ui/Thumblin";
 const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 	const [open, setOpen] = useState(false);
 
+	const removeLastImage = () => {
+		if (!images.length) return;
+		removeImage(images[images.length - 1].id);
+	};
+
 	const {
 		webcamRef,
 		facingMode,
@@ -110,6 +115,7 @@ const MobileCamera = ({ onCapture }: MobileCameraProps) => {
 					<CameraControls
 						imageCount={images.length}
 						onCapture={capture}
+						onDeleteLast={removeLastImage}
 						onDone={() => {
 							closeCamera();
 							setOpen(false);
