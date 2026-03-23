@@ -2,8 +2,9 @@ import MobileCamera from "@/components/Camera/MobileCamera";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-	title: "Nextjs Starter Frontend",
-	description: "Production grade Next.js starter template",
+	title: "Camero - Capture Moments with Your Camera",
+	description:
+		"Camero is a user-friendly camera app that allows you to capture moments.",
 };
 
 const page = () => {
