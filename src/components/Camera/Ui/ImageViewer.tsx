@@ -6,7 +6,7 @@ import {
 	CarouselContent,
 	CarouselItem,
 } from "@/components/shadcnui/carousel";
-import { X } from "lucide-react";
+import { Trash2, X } from "lucide-react";
 import Image from "next/image";
 import { CapturedImage } from "../Types";
 
@@ -14,9 +14,15 @@ interface ImageViewerProps {
 	images: CapturedImage[];
 	startIndex: number;
 	onClose?: () => void;
+	onDelete?: (id: string) => void;
 }
 
-const ImageViewer = ({ images, startIndex, onClose }: ImageViewerProps) => {
+const ImageViewer = ({
+	images,
+	startIndex,
+	onClose,
+	onDelete,
+}: ImageViewerProps) => {
 	return (
 		<div
 			className="fixed inset-0 z-50 flex items-center justify-center bg-black/95"
@@ -48,6 +54,14 @@ const ImageViewer = ({ images, startIndex, onClose }: ImageViewerProps) => {
 										sizes="100vw"
 										className="object-contain"
 									/>
+								</div>
+
+								<div className="flex justify-center py-4">
+									<Button
+										variant="destructive"
+										onClick={() => onDelete?.(img.id)}>
+										<Trash2 size={18} />
+									</Button>
 								</div>
 							</CarouselItem>
 						))}

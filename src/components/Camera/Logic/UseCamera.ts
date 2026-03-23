@@ -10,10 +10,8 @@ export interface MobileCameraProps {
 
 export const useCamera = ({ onCapture }: MobileCameraProps) => {
 	const webcamRef = useRef<Webcam>(null);
-	const imageRef = useRef<string | null>(null);
 	const flashTimeout = useRef<NodeJS.Timeout | null>(null);
 
-	const [open, setOpen] = useState(false);
 	const [facingMode, setFacingMode] = useState<"user" | "environment">(
 		"environment",
 	);
@@ -86,7 +84,6 @@ export const useCamera = ({ onCapture }: MobileCameraProps) => {
 	const closeCamera = () => {
 		stopStream();
 		discardAllImages();
-		setOpen(false);
 	};
 	const removeImage = (id: string) => {
 		setImages((prev) => {
@@ -117,8 +114,6 @@ export const useCamera = ({ onCapture }: MobileCameraProps) => {
 
 	return {
 		webcamRef,
-		open,
-		setOpen,
 		facingMode,
 		setFacingMode,
 		images,
